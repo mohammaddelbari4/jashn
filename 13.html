@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>دعوت‌نامه نامزدی — امیر و سحر</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --card-w-min: 300px;
+    --card-w-max: 420px;
+    --card-aspect: 1.6;
+    --accent: #d44f7a;
+    --btn-size: 68px;
+    --btn-accent: #ff6fa3;
+    --gold-1: rgba(255,200,0,0.92);
+    --gold-2: rgba(255,220,90,0.84);
+    --white-1: rgba(255,255,255,0.95);
+    --white-2: rgba(255,250,230,0.78);
+  }
+  *{box-sizing:border-box}
+  html,body{
+    height:100%;
+    margin:0;
+    font-family:'Vazirmatn',sans-serif;
+    background: url('https://s34.picofile.com/file/8487924626/gold_2.jpg') center center / cover no-repeat fixed;
+    -webkit-font-smoothing:antialiased;
+    overflow: hidden;
+  }
+
+  .stage{
+    min-height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:40px;
+    position:relative;
+  }
+
+  .card-wrap{position:relative;display:flex;flex-direction:column;align-items:center;gap:18px;z-index:4}
+  .card{
+    width:clamp(var(--card-w-min),38vw,var(--card-w-max));
+    height:calc(clamp(var(--card-w-min),38vw,var(--card-w-max)) * var(--card-aspect));
+    perspective:1600px;
+  }
+
+  .flip-area{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.2,.9,.2,1)}
+  .flip-area.is-flipped{transform:rotateY(180deg)}
+
+  .side{position:absolute;inset:0;border-radius:18px;overflow:hidden;backface-visibility:hidden;box-shadow:0 20px 50px rgba(0,0,0,.18);display:flex;align-items:center;justify-content:center}
+
+  .front{background:#111;color:#fff}
+  .front .bg{position:absolute;inset:0;background-image:url('https://s34.picofile.com/file/8487923550/IMG_20251031_192926_434.jpg');background-size:cover;background-position:center;filter:brightness(.6);transition:transform 1s ease;transform-origin:center}
+  .front .vignette{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.2),rgba(0,0,0,.45));}
+  .front .content{position:relative;padding:28px;text-align:center}
+  .names{font-size:clamp(1.6rem,4.2vw,2.4rem);font-weight:700;letter-spacing:.02em}
+  .sub{margin-top:8px;font-size:clamp(.9rem,2.5vw,1.1rem);opacity:.95}
+
+  .back{transform:rotateY(180deg);color:#222;padding:26px}
+  .back .bg{position:absolute;inset:0;background-image:url('https://s34.picofile.com/file/8487924892/bg2.jpg');background-size:cover;background-position:center;filter:brightness(.6);transition:transform 1s ease;transform-origin:center}
+  .back .vignette{position:absolute;inset:0;background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.12));}
+
+  .back .inner{
+    padding:18px;border-radius:12px;width:100%;height:100%;
+    display:flex;flex-direction:column;justify-content:center;align-items:center;gap:12px;
+    text-align:center;position:relative;z-index:6;
+  }
+  .back .inner p{margin:0;line-height:1.6;color:#fff;font-weight:700;font-size:clamp(1rem,2.2vw,1.15rem);text-shadow:0 12px 36px rgba(0,0,0,.55),0 24px 56px rgba(0,0,0,.45);transition:transform .35s,text-shadow .35s}
+  .back .inner .couple{font-weight:800;font-size:clamp(1.2rem,2.8vw,1.6rem);letter-spacing:.02em;color:#fff;text-shadow:0 16px 48px rgba(0,0,0,.6),0 28px 68px rgba(0,0,0,.45)}
+  .back .inner p.meta{font-weight:700;opacity:.98;color:#fff}
+  .back .inner p:hover{transform:translateY(-4px) scale(1.01);text-shadow:0 20px 50px rgba(0,0,0,.65)}
+
+  .controls{display:flex;gap:18px;align-items:center;justify-content:center;position:relative;z-index:8}
+  .btn-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;position:relative}
+  .btn-circle{width:var(--btn-size);height:var(--btn-size);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#fff,#ffeef6);box-shadow:0 12px 28px rgba(0,0,0,.22);border:1px solid rgba(0,0,0,.06);cursor:pointer;position:relative;overflow:visible;transition:transform .28s,box-shadow .28s}
+  .btn-circle img{width:44%;height:44%;object-fit:contain;filter:drop-shadow(0 6px 14px rgba(0,0,0,.25));transition:transform .28s}
+  .btn-label{font-size:.95rem;font-weight:700;color:var(--accent);text-align:center;transition:color .22s,transform .22s}
+  .btn-wrap:hover .btn-label{color:var(--btn-accent);transform:translateY(-3px)}
+
+  .btn-label.white-stroked{
+    color:#ffffff !important;
+    -webkit-text-stroke: 1px #000000;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.85), 0 1px 0 rgba(0,0,0,0.8);
+    font-size: 1.2rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .btn-splash{position:absolute;left:50%;top:50%;transform:translate(-50%,-45%) rotate(-12deg) scale(1);width:calc(var(--btn-size)*2.6);height:calc(var(--btn-size)*2.6);pointer-events:none;z-index:-1;filter:blur(6px) saturate(1.15);opacity:1;background:
+      radial-gradient(30% 25% at 20% 20%, rgba(255,235,150,0.22), transparent 20%),
+      radial-gradient(28% 22% at 80% 30%, rgba(255,250,230,0.12), transparent 22%),
+      radial-gradient(18% 16% at 35% 75%, rgba(255,255,255,0.14), transparent 34%),
+      radial-gradient(10% 8% at 70% 80%, rgba(255,255,255,0.06), transparent 46%);mix-blend-mode:screen;transition:transform .28s,opacity .28s}
+
+  .ripple{position:absolute;border-radius:50%;transform:scale(0);background:rgba(212,79,122,.14);animation:ripple .6s linear;pointer-events:none}
+  @keyframes ripple{to{transform:scale(6);opacity:0}}
+
+  .bubbles{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:9999;
+    overflow:visible;
+    display:block;
+  }
+
+  .bubble{
+    position:absolute;
+    bottom:0;
+    border-radius:50%;
+    opacity:0;
+    transform-origin:center;
+    will-change:transform,opacity,filter,left,top;
+    box-shadow: 0 6px 18px rgba(0,0,0,.14), 0 0 18px rgba(255,220,120,.12) inset;
+    filter: blur(1.6px);
+    mix-blend-mode: screen;
+    transition:opacity .45s ease;
+  }
+
+  /* --- کادر انتخاب مسیریاب (modal) --- */
+  .map-chooser-backdrop{
+    position:fixed;
+    inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    background:rgba(0,0,0,0.36);
+    z-index:10010;
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+  }
+  .map-chooser{
+    width: min(86vw, 360px);
+    max-width:360px;
+    aspect-ratio:1/1;
+    border-radius:50%;
+    background:linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,245,240,0.95));
+    box-shadow:0 30px 80px rgba(0,0,0,0.45), inset 0 4px 18px rgba(255,255,255,0.6);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    padding:18px;
+    text-align:center;
+
+    /* initial closed state for animation */
+    transform: scale(0.78) translateY(12px);
+    opacity: 0;
+    transition: transform .42s cubic-bezier(.18,.9,.28,1), opacity .32s ease;
+  }
+  .map-chooser.show{
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+  .map-chooser .title{
+    font-weight:800;
+    color:#222;
+    font-size:1.05rem;
+  }
+  .map-options{
+    display:flex;
+    gap:18px;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+  .map-option{
+    width:72px;
+    height:72px;
+    border-radius:50%;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,#fff,#ffeef6);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    border:1px solid rgba(0,0,0,0.06);
+    cursor:pointer;
+    user-select:none;
+    transition:transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s;
+    overflow:hidden;
+    padding:8px;
+  }
+  .map-option:active{ transform:scale(.96); }
+  .map-option img{ width:100%; height:100%; object-fit:contain; display:block; filter: drop-shadow(0 6px 10px rgba(0,0,0,.16)); }
+
+  .map-close{
+    position:absolute;
+    right:8%;
+    top:6%;
+    background:transparent;
+    border:none;
+    font-weight:700;
+    color:#333;
+    cursor:pointer;
+    font-size:1rem;
+  }
+
+  @media (max-width:480px){
+    :root{--card-aspect:1.5;--btn-size:60px}
+    .map-option{ width:60px; height:60px; }
+  }
+
+  @keyframes rise{
+    0% {
+      transform: translateY(0) translateX(0) scale(0.5) rotate(0deg);
+      opacity:0;
+      filter: blur(2px) brightness(0.96);
+    }
+    6% {
+      opacity:0.6;
+      transform: translateY(-4vh) translateX(0) scale(0.82) rotate(2deg);
+    }
+    35% {
+      transform: translateY(-44vh) translateX(var(--drift, 0px)) scale(1.02) rotate(var(--rot, 0deg));
+      filter: blur(1.2px) brightness(1.02);
+    }
+    75% {
+      opacity:0.42;
+      transform: translateY(-100vh) translateX(calc(var(--drift, 0px) * 1.1)) scale(1.08) rotate(calc(var(--rot, 0deg) + 8deg));
+      filter: blur(2.2px) brightness(1.04);
+    }
+    100% {
+      transform: translateY(-140vh) translateX(calc(var(--drift, 0px) * 1.2)) scale(1.12) rotate(calc(var(--rot, 0deg) + 14deg));
+      opacity:0;
+      filter: blur(3px) brightness(1.05);
+    }
+  }
+
+  @media (max-width:480px){
+    :root{--card-aspect:1.5;--btn-size:60px}
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="bubbles" id="bubbles"></div>
+
+    <div class="card-wrap">
+      <div class="card" role="region" aria-label="کارت دعوت">
+        <div class="flip-area" id="flipArea">
+
+          <div class="side front" aria-hidden="false">
+            <div class="bg"></div>
+            <div class="vignette"></div>
+            <div class="content">
+              <div class="names">امیر &nbsp;<span style="color:var(--accent);">♥</span>&nbsp; سحر</div>
+              <div class="sub">کارت دعوت</div>
+            </div>
+          </div>
+
+          <div class="side back" aria-hidden="true">
+            <div class="bg"></div>
+            <div class="vignette"></div>
+
+            <div class="inner">
+              <p>دوست عزیز، آرزویمان این است که در این شب کنار ما باشید تا با خاطراتی فراموش‌نشدنی به هم بپیوندیم.</p>
+              <p class="couple">امیر و سحر</p>
+              <p class="meta">📅 تاریخ: ۱۴۰۴/۰۸/۲۲</p>
+              <p class="meta">📍 آدرس: کمربندی بومهن، منطقه مهرآباد</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="controls" aria-hidden="false">
+        <div class="btn-wrap" id="wrapFlip">
+          <div class="btn-splash" aria-hidden="true"></div>
+          <button class="btn-circle" id="flipBtnBottom" title="چرخش کارت" type="button" aria-label="چرخش">
+            <img class="icon-img" src="https://s34.picofile.com/file/8487924568/rot.png" alt="چرخش">
+          </button>
+          <div class="btn-label white-stroked">چرخش</div>
+        </div>
+
+        <div class="btn-wrap" id="wrapNav">
+          <div class="btn-splash" aria-hidden="true"></div>
+          <!-- href به # تغییر کرد تا JS کنترل نمایش chooser را داشته باشد -->
+          <a class="btn-circle" id="navBtnBottom" href="#" aria-label="موقعیت">
+            <img class="icon-img" src="https://s34.picofile.com/file/8487924600/loc.png" alt="لوکیشن">
+          </a>
+          <div class="btn-label white-stroked">مسیریابی</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Map chooser modal (دایره ای) -->
+  <div class="map-chooser-backdrop" id="mapChooserBackdrop" aria-hidden="true">
+    <div class="map-chooser" id="mapChooser" role="dialog" aria-modal="true" aria-label="انتخاب مسیریاب">
+      <button class="map-close" id="mapChooserClose" aria-label="بستن">✕</button>
+      <div class="title">باز کردن در</div>
+      <div class="map-options" role="menu" aria-label="گزینه‌های نقشه">
+        <!-- فقط آیکون‌ها طبق درخواست شما -->
+        <button class="map-option" data-link="https://nshn.ir/rb_bvetSQxtKrh" aria-label="نشان" title="نشان">
+          <img src="https://s34.picofile.com/file/8487926892/neshan.png" alt="نشان">
+        </button>
+        <button class="map-option" data-link="https://maps.app.goo.gl/9e5VxiQQ2U588BbS7" aria-label="گوگل مپ" title="گوگل مپ">
+          <img src="https://s34.picofile.com/file/8487926876/Google_Maps_icon_2020_svg.png" alt="گوگل مپ">
+        </button>
+        <button class="map-option" data-link="https://balad.ir/p/4zO8EmzJwM9a1w" aria-label="بلد" title="بلد">
+          <img src="https://s34.picofile.com/file/8487926884/Balad_Logo.png" alt="بلد">
+        </button>
+      </div>
+    </div>
+  </div>
+
+<script>
+(async function(){
+  const AUDIO_URL = 'https://dl.mehrdl.top/Music/A/P/LoveMo/Ed_Sheeran_Perfect_320.mp3';
+  const flipArea = document.getElementById('flipArea');
+  const flipBtnBottom = document.getElementById('flipBtnBottom');
+  const navBtnBottom = document.getElementById('navBtnBottom');
+  const bubblesContainer = document.getElementById('bubbles');
+
+  // Map chooser elements
+  const chooserBackdrop = document.getElementById('mapChooserBackdrop');
+  const chooser = document.getElementById('mapChooser');
+  const chooserClose = document.getElementById('mapChooserClose');
+
+  // Audio setup (unchanged)
+  let audioCtx = null;
+  let bufferSource = null;
+  let gainNode = null;
+  let started = false;
+  let audioElementFallback = null;
+
+  async function startViaWebAudio(){
+    if(started) return true;
+    try{
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if(!AudioCtx) throw new Error('WebAudio unsupported');
+      audioCtx = new AudioCtx();
+      if(audioCtx.state === 'suspended') await audioCtx.resume();
+
+      const resp = await fetch(AUDIO_URL, {mode:'cors'});
+      if(!resp.ok) throw new Error('fetch failed');
+      const ab = await resp.arrayBuffer();
+      const decoded = await audioCtx.decodeAudioData(ab);
+
+      bufferSource = audioCtx.createBufferSource();
+      bufferSource.buffer = decoded;
+      bufferSource.loop = true;
+
+      gainNode = audioCtx.createGain();
+      gainNode.gain.value = 0;
+
+      bufferSource.connect(gainNode).connect(audioCtx.destination);
+      bufferSource.start(0);
+
+      const now = audioCtx.currentTime;
+      gainNode.gain.setValueAtTime(0, now);
+      gainNode.gain.linearRampToValueAtTime(1, now + 1.0);
+
+      started = true;
+      return true;
+    }catch(e){
+      try{ if(bufferSource){ try{ bufferSource.stop(); }catch{} bufferSource.disconnect(); bufferSource=null; } }catch{}
+      try{ if(gainNode){ gainNode.disconnect(); gainNode=null; } }catch{}
+      try{ if(audioCtx){ audioCtx.close(); audioCtx=null; } }catch{}
+      started = false;
+      return false;
+    }
+  }
+
+  function startViaAudioElement(){
+    if(started) return true;
+    try{
+      const a = document.createElement('audio');
+      a.src = AUDIO_URL;
+      a.loop = true;
+      a.autoplay = true;
+      a.playsInline = true;
+      a.preload = 'auto';
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.volume = 0;
+      const p = a.play();
+      if(p !== undefined){
+        p.then(()=> {
+          let vol = 0;
+          const step = 0.05;
+          const timer = setInterval(()=>{
+            vol = Math.min(1, vol + step);
+            a.volume = vol;
+            if(vol >= 1) clearInterval(timer);
+          }, 60);
+        }).catch(()=>{});
+      }
+      audioElementFallback = a;
+      started = true;
+      return true;
+    }catch(e){
+      return false;
+    }
+  }
+
+  // Bubbles start on load (unchanged)
+  window.addEventListener('load', async ()=>{
+    startViaWebAudio().then(ok=>{ if(!ok) startViaAudioElement(); });
+    for(let i=0;i<6;i++){ setTimeout(createBubble, i*120); }
+    setTimeout(()=> bubbleSpawner(), 600);
+  });
+
+  async function unlockAndStart(){
+    if(started) return;
+    const ok = await startViaWebAudio();
+    if(!ok) startViaAudioElement();
+    window.removeEventListener('pointerdown', unlockAndStart);
+    window.removeEventListener('keydown', unlockAndStart);
+    window.removeEventListener('touchstart', unlockAndStart);
+  }
+  window.addEventListener('pointerdown', unlockAndStart, {passive:true});
+  window.addEventListener('keydown', unlockAndStart, {passive:true});
+  window.addEventListener('touchstart', unlockAndStart, {passive:true});
+
+  // UI interactions
+  function toggleFlip(){ flipArea.classList.toggle('is-flipped'); }
+  if(flipBtnBottom) flipBtnBottom.addEventListener('click', ()=> { toggleFlip(); });
+
+  function createRipple(e){
+    const el = e.currentTarget;
+    const rect = el.getBoundingClientRect();
+    const ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    const size = Math.max(rect.width, rect.height);
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = ((e.clientX || rect.left + rect.width/2) - rect.left - size/2) + 'px';
+    ripple.style.top = ((e.clientY || rect.top + rect.height/2) - rect.top - size/2) + 'px';
+    el.appendChild(ripple);
+    setTimeout(()=> ripple.remove(), 700);
+  }
+  document.querySelectorAll('.btn-circle').forEach(b=>{
+    b.addEventListener('click', createRipple);
+    b.addEventListener('keydown', (e)=>{ if(e.key===' '||e.key==='Enter'){ createRipple(e); }});
+  });
+
+  // Bubbles helpers (unchanged)
+  function rand(min,max){ return Math.random()*(max-min)+min; }
+
+  function createBubble(){
+    if(!bubblesContainer) return;
+    const b = document.createElement('div');
+    b.className = 'bubble';
+
+    const size = Math.floor(rand(10,70));
+    b.style.width = b.style.height = size + 'px';
+
+    const pick = Math.random();
+    if(pick < 0.45){
+      b.style.background = `radial-gradient(circle at 30% 30%, rgba(255,255,255,0.86) 0%, rgba(255,245,210,0.72) 40%, rgba(255,200,0,0.6) 100%)`;
+    } else if(pick < 0.82){
+      b.style.background = `radial-gradient(circle at 32% 34%, rgba(255,255,255,0.86) 0%, rgba(255,250,230,0.72) 50%, rgba(255,220,90,0.64) 100%)`;
+    } else {
+      b.style.background = `radial-gradient(circle at 40% 30%, rgba(255,255,255,0.89) 0%, rgba(255,250,240,0.72) 60%, rgba(255,255,255,0.68) 100%)`;
+    }
+
+    let left;
+    const focus = Math.random();
+    if(focus < 0.65){
+      left = rand(18,82);
+    } else {
+      left = rand(-8,108);
+    }
+    b.style.left = left + '%';
+
+    b.style.bottom = rand(-40, -8) + 'px';
+
+    const drift = Math.floor(rand(-120,120));
+    const rot = Math.floor(rand(-18,18));
+    b.style.setProperty('--drift', drift + 'px');
+    b.style.setProperty('--rot', rot + 'deg');
+
+    const duration = rand(5.0,12.0);
+    const delay = rand(0,0.9);
+    b.style.animation = `rise ${duration}s linear ${delay}s forwards`;
+
+    const glow = Math.min(0.28, 0.12 + (70 - size) / 500);
+    b.style.boxShadow = `0 ${Math.max(4,size/10)}px ${Math.max(10,size/4)}px rgba(0,0,0,0.12), 0 0 ${Math.max(10,size/3)}px rgba(255,220,120,${glow}) inset`;
+
+    b.style.transform = `translateY(0) translateX(${Math.floor(rand(-6,6))}px) scale(${Math.max(0.38, size/120)})`;
+
+    b.style.opacity = '0.55';
+    bubblesContainer.appendChild(b);
+
+    const total = (duration + delay + 0.6) * 1000;
+    setTimeout(()=> { if(b && b.parentNode) b.parentNode.removeChild(b); }, total);
+  }
+
+  let bubbleTimerId = null;
+  function bubbleSpawner(){
+    const burst = Math.random() < 0.28 ? Math.floor(rand(2,6)) : 1;
+    for(let i=0;i<burst;i++){
+      setTimeout(createBubble, Math.floor(rand(0,240)));
+    }
+    const next = Math.floor(rand(80,520));
+    bubbleTimerId = setTimeout(bubbleSpawner, next);
+  }
+
+  // toggle flip with keyboard
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === ' ' || e.key === 'Enter'){
+      const active = document.activeElement;
+      if(!active || (active.tagName !== 'INPUT' && active.tagName !== 'TEXTAREA' && active.tagName !== 'A')){
+        e.preventDefault();
+        const fa = document.getElementById('flipArea');
+        if(fa) fa.classList.toggle('is-flipped');
+      }
+    }
+  });
+
+  // ---------------- Map chooser logic (only this section changed) ----------------
+  function showChooser(){
+    chooserBackdrop.style.display = 'flex';
+    chooserBackdrop.setAttribute('aria-hidden', 'false');
+    // apply show class after paint for animation
+    requestAnimationFrame(()=> chooser.classList.add('show'));
+  }
+  function hideChooser(){
+    chooser.classList.remove('show');
+    setTimeout(()=> {
+      chooserBackdrop.style.display = 'none';
+      chooserBackdrop.setAttribute('aria-hidden', 'true');
+    }, 360);
+  }
+
+  // open chooser with attractive style when nav button clicked
+  if(navBtnBottom){
+    navBtnBottom.addEventListener('click', function(e){
+      e.preventDefault();
+      showChooser();
+    }, {passive:true});
+    navBtnBottom.setAttribute('href', '#');
+  }
+
+  // close chooser
+  chooserClose.addEventListener('click', hideChooser);
+  chooserBackdrop.addEventListener('click', function(e){
+    if(e.target === chooserBackdrop) hideChooser();
+  });
+
+  // open provided links when an icon is clicked
+  document.querySelectorAll('.map-option').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      const url = btn.getAttribute('data-link');
+      if(!url) return hideChooser();
+      // navigate (mobile apps or browser will handle)
+      window.location.href = url;
+      hideChooser();
+    }, {passive:true});
+  });
+
+  // helper for debugging
+  window.__createBubbleForDebug = createBubble;
+
+})();
+</script>
+</body>
+</html>
